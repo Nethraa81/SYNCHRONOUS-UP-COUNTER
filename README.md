@@ -47,107 +47,30 @@ Developed by: N.NETHRAA
 RegisterNumber: 24900193
 */
 
-module syn_counter (
+module exp11(out,clk,rstn);
 
-input clk,    // Clock signal
-    
-input rst,    // Reset signal (active high)
-    
-output [3:0] q // 4-bit output
+input clk,rstn;
 
-);
+output reg [3:0]out;
 
-wire [3:0] j, k; // J and K inputs for each JK flip-flop
-    
-wire [3:0] t;    // Toggle signal for each flip-flop
+always @
 
-// Generate the toggle signals for each stage
-    
-assign j[0] = 1'b1; // First flip-flop toggles on every clock pulse
-    
-assign k[0] = 1'b1;
-    
-assign t[0] = q[0]; // Output of the first flip-flop
+(posedge clk) begin if(!rstn) out<=0;
 
-assign j[1] = q[0]; // Second flip-flop toggles on q[0] high
-    
-assign k[1] = q[0];
-    
-assign t[1] = q[1];
+else out <= out+1;
 
-assign j[2] = q[0] & q[1]; // Third flip-flop toggles on q[1:0] high
+end endmodule
     
-assign k[2] = q[0] & q[1];
-    
-assign t[2] = q[2];
-
-assign j[3] = q[0] & q[1] & q[2]; // Fourth flip-flop toggles on q[2:0] high
-    
-assign k[3] = q[0] & q[1] & q[2];
-    
-assign t[3] = q[3];
-
-// Instantiate 4 JK flip-flops
-    
-jk_flipflop jk0 (.clk(clk), .rst(rst), .j(j[0]), .k(k[0]), .q(q[0]));
-    
-jk_flipflop jk1 (.clk(clk), .rst(rst), .j(j[1]), .k(k[1]), .q(q[1]));
-    
-jk_flipflop jk2 (.clk(clk), .rst(rst), .j(j[2]), .k(k[2]), .q(q[2]));
-    
-jk_flipflop jk3 (.clk(clk), .rst(rst), .j(j[3]), .k(k[3]), .q(q[3]));
-
-endmodule
-
-// JK flip-flop module
-
-module jk_flipflop (
-    
-input clk,    // Clock signal
-    
-input rst,    // Reset signal (active high)
-    
-input j,      // J input
-    
-input k,      // K input
-    
-output reg q  // Q output
-
-);
-
-always @(posedge clk or posedge rst) begin
-       
-if (rst) begin
-        
-q <= 1'b0; // Reset output to 0
-        
-end else begin
-        
-case ({j, k})
-            
-2'b00: q <= q;       // No change
-                
-2'b01: q <= 1'b0;    // Reset
-                
-2'b10: q <= 1'b1;    // Set
-                
-2'b11: q <= ~q;      // Toggle
-            
-endcase
-        
-end
-    
-end
-
-endmodule
 
 **RTL LOGIC UP COUNTER**
 
-![Screenshot 2024-12-31 133209](https://github.com/user-attachments/assets/6a8ccc1e-b408-49b2-8325-e3503458e79d)
+![WhatsApp Image 2025-01-04 at 10 49 01_3bde8785](https://github.com/user-attachments/assets/715291cc-ddc0-4db3-9c7f-5128b07e8880)
+
 
 **TIMING DIAGRAM FOR IP COUNTER**
 
-![Screenshot 2024-12-31 133310](https://github.com/user-attachments/assets/49e1adce-28d9-4d23-8b87-70574e0324db)
+![WhatsApp Image 2025-01-04 at 10 49 01_fb063424](https://github.com/user-attachments/assets/9176002a-c42c-4143-91a4-045810e6592d)
+
 
 **TRUTH TABLE**
 
